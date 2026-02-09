@@ -158,8 +158,11 @@ const smtp = new SMTPServer({
 serve({
     fetch: app.fetch,
     port: PORT_WEB,
-    createServer: (args) => createServer(sslOptions, args)
-}, () => console.log(`🌍 Web HTTPS direct prêt sur le port ${PORT_WEB}`));
+    // On ignore le premier argument (info) et on prend le deuxième (handle)
+    createServer: (info, handle) => createServer(sslOptions, handle)
+}, (info) => {
+    console.log(`🌍 Web HTTPS direct prêt sur le port ${PORT_WEB}`);
+});
 
 // Serveur SMTP (Port 25)
 smtp.listen(PORT_SMTP, () => console.log(`📧 SMTP prêt sur le port ${PORT_SMTP}`));
