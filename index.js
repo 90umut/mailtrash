@@ -1,12 +1,14 @@
 import 'dotenv/config';
 import { readFileSync } from 'node:fs';
 import { createServer } from 'node:https';
-import { serve } from '@hono/node-server';
 import { Hono } from 'hono';
 import { Telegraf, Markup } from 'telegraf';
 import { SMTPServer } from 'smtp-server';
 import { simpleParser } from 'mailparser';
 import { v4 as uuidv4 } from 'uuid';
+
+import { serve } from '@hono/node-server';
+import { createServer as createHttpsServer } from 'node:https';
 
 // --- CONFIGURATION ---
 const DOMAIN = process.env.DOMAIN;
@@ -158,11 +160,10 @@ const smtp = new SMTPServer({
 serve({
     fetch: app.fetch,
     port: PORT_WEB,
-    // On ignore le premier argument (info) et on prend le deuxième (handle)
-    createServer: (info, handle) => createServer(sslOptions, handle)
+    createServer: createHttpsServer,
+    serverOptions: sslOptions
 }, (info) => {
     console.log(`🌍 Web HTTPS direct prêt sur le port ${PORT_WEB}`);
 });
-
 // Serveur SMTP (Port 25)
 smtp.listen(PORT_SMTP, () => console.log(`📧 SMTP prêt sur le port ${PORT_SMTP}`));
