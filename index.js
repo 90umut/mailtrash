@@ -17,7 +17,30 @@ const PORT_SMTP = process.env.SMTP_PORT || 25;
 const mailStorage = new Map();
 
 // --- UTILITAIRES ---
-
+// Route de test simple
+app.get('/', (c) => {
+    return c.html(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Status Serveur</title>
+            <style>
+                body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background: #f0f2f5; }
+                .card { background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center; }
+                h1 { color: #10b981; margin: 0; }
+                p { color: #6b7280; }
+            </style>
+        </head>
+        <body>
+            <div class="card">
+                <h1>🚀 C'est en ligne !</h1>
+                <p>Ton serveur Hono fonctionne parfaitement.</p>
+                <p><small>SSL et Nginx sont bien configurés.</small></p>
+            </div>
+        </body>
+        </html>
+    `);
+});
 // 1. Nettoyage HTML pour éviter le crash Telegram (Correction de ton erreur)
 function escapeHTML(str) {
     if (!str) return "";
